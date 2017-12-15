@@ -36,13 +36,13 @@ func (h *HTTPTrainHandler) GetById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HTTPTrainHandler) Fetch(w http.ResponseWriter, r *http.Request) {
-  // todo: check start limit should be
-  start, _ := strconv.Atoi(r.FormValue("start"))
-  limit, _ := strconv.Atoi(r.FormValue("limit"))
-  res, err := h.ItemUCase.Fetch(start, limit)
-  if err != nil {
-    json.NewEncoder(w).Encode(err.Error())
-    return
-  }
-  json.NewEncoder(w).Encode(res)
+	// todo: check start limit should be
+	start, _ := strconv.Atoi(r.FormValue("start"))
+	limit, _ := strconv.Atoi(r.FormValue("limit"))
+	res, err := h.ItemUCase.Fetch(start, limit)
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }

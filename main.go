@@ -29,17 +29,17 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	// Setup new SQL db handler from opened connection. 
+	// Setup new SQL db handler from opened connection.
 	handle := cleanarch.NewSQLHandler(db)
 	// create use case
 	truc := cleanarch.NewTrainUCase(handle)
 	// create new http services handler
 	handler := cleanarch.NewHTTPTrainHandler(truc)
-	
-// Set route path
-  trRouter.HandleFunc("/", handler.Fetch).Methods("GET")
+
+	// Set route path
+	trRouter.HandleFunc("/", handler.Fetch).Methods("GET")
 	trRouter.HandleFunc("/{id:[0-9]+}", handler.GetById).Methods("GET")
-	
+
 	// its ready to start http services
 	http.ListenAndServe(":8000", handlers.LoggingHandler(os.Stdout, router))
 }

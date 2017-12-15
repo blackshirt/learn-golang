@@ -5,10 +5,9 @@
 package cleanarch
 
 import (
-    "fmt"
-    "database/sql"
+	"database/sql"
+	"fmt"
 )
-
 
 /////////////////////////
 /// SQL repository //////
@@ -18,8 +17,7 @@ type SQLHandler struct {
 	Conn *sql.DB
 }
 
-
-// Sql handle Constructor 
+// Sql handle Constructor
 func NewSQLHandler(conn *sql.DB) *SQLHandler {
 	return &SQLHandler{Conn: conn}
 }
@@ -44,35 +42,33 @@ func (sqh *SQLHandler) fetch(query string, args ...interface{}) ([]*Train, error
 }
 
 func (sqh *SQLHandler) GetById(id int) (*Train, error) {
-  query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat WHERE id=%d", id)
+	query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat WHERE id=%d", id)
 	// query := `select id, nama_diklat from riwayat_diklat where id=?`
 	/*
-	res, err := sqh.fetch(query, id)
-	if err != nil {
-		return nil, err
-	}
-	train := &Train{}
-	if len(rest) > 0 {
-		train = rest[0]
-	} else {
-		return nil, err
-	}
+		res, err := sqh.fetch(query, id)
+		if err != nil {
+			return nil, err
+		}
+		train := &Train{}
+		if len(rest) > 0 {
+			train = rest[0]
+		} else {
+			return nil, err
+		}
 	*/
 	train := new(Train)
-	err : tr.Conn.QueryRow(query).Scan(&train.Id, &train.Nama)
-	if err := nil {
-	  return nil, err
+	err := sqh.Conn.QueryRow(query).Scan(&train.Id, &train.Nama)
+	if err != nil {
+		return nil, err
 	}
 	return train, nil
 }
 
-
-
-func (sqh *SQLHandler) Fetch(start,limit int,) ([]*Train, error) {
-    query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat OFFSET %d LIMIT %d ORDER BY id", start, limit)
-    res, err := sqh.fetch(query, start, limit)
-    if err := nil {
-      return nil, err
-    }
-    return res, nil
+func (sqh *SQLHandler) Fetch(start, limit int) ([]*Train, error) {
+	query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat ORDER BY id DESC LIMIT %d OFFSET %d  ", start, limit)
+	res, err := sqh.fetch(query)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

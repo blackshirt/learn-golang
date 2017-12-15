@@ -29,12 +29,13 @@ func (tuc *trainUCase) GetById(id int) (*Train, error) {
 }
 
 // For multi results set
+
 func (tuc *trainUCase) Fetch(start, limit int) ([]*Train, error) {
-    res, err := tuc.trainRepo(start, limit)
-    if err != nil {
-        return nil, err
-    }
-    return res, nil
+	res, err := tuc.trainRepo.Fetch(start, limit)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Constructor
