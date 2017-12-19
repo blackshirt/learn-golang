@@ -17,7 +17,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-
 	// sample my own package
 	"github.com/blackshirt/learn-golang/token"
 )
@@ -28,7 +27,7 @@ var myKey = []byte("rahasia")
 
 func main() {
 
-	db, err := sql.Open("mysql", "dbq:123@tcp(127.0.0.1:3306)/dbq")
+	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/test")
 	if err != nil {
 		panic(err)
 	}
@@ -46,6 +45,14 @@ func main() {
 	// Pengecualian jika route diset path prefix dengan PathPrefix(), strict slash
 	// akan diignore untuk route tersebut.
 	router := mux.NewRouter().StrictSlash(true)
+
+	// This is for static dir, for examples, js and css or ther related files
+	staticFileDir := http.Dir("./static/")
+	// serve static file over /static/ path
+	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDir))
+	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
+
+	// Get the index handler using static resources
 	router.HandleFunc("/", IndexHandler).Methods("GET")
 	router.HandleFunc("/login", LoginHandler).Methods("POST")
 	router.HandleFunc("/token", TokenHandler).Methods("GET")
@@ -68,7 +75,7 @@ type training struct {
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	// example using html/template features
-	fp := path.Join("templates", "index.html")
+	fp := path.Join("static", "index.html")
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
