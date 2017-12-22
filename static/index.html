@@ -1,5 +1,12 @@
+<!doctype html>
 <html>
 <head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+	
+	
 	<!-- set base href to /static/, so polymer resources lives under /static/ path of go mux router -->
 	<base href="/static/">
 	
@@ -31,10 +38,25 @@
     </custom-style>
 </head>
 <body>
+  
+  <app-drawer-layout fullbleed>
+   <app-drawer slot="drawer">
+	
+		
+   </app-drawer>
+
+   <app-header-layout>
+   <app-header slot="header">
 	<app-toolbar>
-      	<paper-icon-button icon="menu"></paper-icon-button>
+      <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
     		<div main-title>Polymer App</div>
-    	<paper-icon-button icon="search"></paper-icon-button>
+    	  <paper-icon-button icon="search"></paper-icon-button>
     </app-toolbar>
+   </app-header>
+	main content
+   </app-header-layout>
+ </app-drawer-layout>
+ 
+
 </body>
 </html>

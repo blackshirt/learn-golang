@@ -27,7 +27,7 @@ var myKey = []byte("rahasia")
 
 func main() {
 
-	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/test")
+	db, err := sql.Open("mysql", "dbq:123@tcp(127.0.0.1:3306)/dbq")
 	if err != nil {
 		panic(err)
 	}
