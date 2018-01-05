@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"path"
 
 	"github.com/blackshirt/learn-golang/cleanarch"
 	_ "github.com/go-sql-driver/mysql"
@@ -12,14 +14,38 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	// example using html/template features
+	fp := path.Join("static", "index.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	// you can pass data in template.Execute(w, data)
+	if tmpl.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+}
+
 func main() {
 	// create mux Router
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
+
+	// This is for static dir, for examples, js and css or ther related files
+	staticFileDir := http.Dir("./static/")
+	// serve static file over /static/ path
+	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDir))
+	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
+
+	// Get the index handler using static resources
+	router.HandleFunc("/", IndexHandler).Methods("GET")
+
 	// create subrouter for 'trains' path
 	trRouter := router.PathPrefix("/trains").Subrouter()
 
 	// open database connections to mysql server. maybe its should be moved to infrastructures layer.
-	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/test")
+	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/dbq")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -41,5 +67,5 @@ func main() {
 	trRouter.HandleFunc("/{id:[0-9]+}", handler.GetById).Methods("GET")
 
 	// its ready to start http services
-	http.ListenAndServe(":8000", handlers.LoggingHandler(os.Stdout, router))
+	http.ListenAndServe(":5000", handlers.LoggingHandler(os.Stdout, router))
 }

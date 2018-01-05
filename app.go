@@ -88,7 +88,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TrainingsHandler(w http.ResponseWriter, r *http.Request) {
-	stmt := "select id, penyelenggara, nama_diklat, thn_diklat from riwayat_diklat limit 20"
+	stmt := "select id, penyelenggara, nama_diklat, thn_diklat from riwayat_diklat limit 100"
 	rows, err := database.Query(stmt)
 	if err != nil {
 		panic(err)

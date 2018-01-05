@@ -65,7 +65,7 @@ func (sqh *SQLHandler) GetById(id int) (*Train, error) {
 }
 
 func (sqh *SQLHandler) Fetch(start, limit int) ([]*Train, error) {
-	query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat ORDER BY id DESC LIMIT %d OFFSET %d  ", start, limit)
+	query := fmt.Sprintf("SELECT id, nama_diklat FROM riwayat_diklat ORDER BY id DESC LIMIT %d OFFSET %d  ", limit, start)
 	res, err := sqh.fetch(query)
 	if err != nil {
 		return nil, err
