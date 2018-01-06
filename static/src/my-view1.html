@@ -46,8 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	-->
 	<!-- menggungakan iron-list -->
 	<iron-list items="[[trainings]]" as="item">
-    		<template>
-      		<div class="card">
+    		<template is="dom-bind">
+      		<div class="card" tabindex$="[[tabIndex]]">
       			<div class="circle">{{item.id}}</div>
       			<h1>{{item.thn_diklat}}</h1>
       			<p>{{item.nama_diklat}}</p>
@@ -68,10 +68,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			}
 		}
 	  }
-	  ready() {
-		super.ready();
-		this.$.reqTr.generateRequest();
-	  }
+	  //ready() {
+	  //	super.ready();
+	  //	this.$.reqTr.generateRequest();
+	  //}
 	  handleResponse(data) {
 		this.trainings = data.detail.response;
 	  }
