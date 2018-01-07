@@ -32,7 +32,7 @@ func main() {
 	// create mux Router
 	router := mux.NewRouter().StrictSlash(true)
 
-	// This is for static dir, for examples, js and css or ther related files
+	// This is for static dir, for examples, js and css or other related files
 	staticFileDir := http.Dir("./static/")
 	// serve static file over /static/ path
 	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDir))
@@ -49,7 +49,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	// lebih bijaksana selalu panggil Close
 	defer db.Close()
+	// cek jika aktif dengan Ping
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err.Error())
