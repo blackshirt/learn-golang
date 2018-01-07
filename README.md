@@ -40,9 +40,10 @@ Berisi contoh sederhana aplikasi berbasis http/web menggunakan golang net/http d
 Contoh membuat package sendiri yang digunakan di app.go di atas.
 
 
-6. templates/index.html
+6. static/index.html
 ***********************
 Contoh file yang digunakan app.go di atas, untuk bagaimana merender file html menggunakan fasilitas library html/template.
+Termasuk integrasi dengan google polymer webcomponent library.
 
 
 7. keys/*

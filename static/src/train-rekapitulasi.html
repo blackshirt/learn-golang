@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view1">
+<dom-module id="train-rekapitulasi">
   <template>
     <style include="shared-styles">
       :host {
@@ -59,8 +59,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+    class TrainRekapitulasi extends Polymer.Element {
+      static get is() { return 'train-rekapitulasi'; }
 	  static get properties() {
 		return {
 			trainings: {
@@ -77,6 +77,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  }
     }
 
-    window.customElements.define(MyView1.is, MyView1);
+    window.customElements.define(TrainRekapitulasi.is, TrainRekapitulasi);
   </script>
 </dom-module>
