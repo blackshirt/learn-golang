@@ -45,7 +45,7 @@ func main() {
 	trRouter := router.PathPrefix("/trains").Subrouter()
 
 	// open database connections to mysql server. maybe its should be moved to infrastructures layer.
-	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/dbq")
+	db, err := sql.Open("mysql", "test:123@tcp(127.0.0.1:3306)/test")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

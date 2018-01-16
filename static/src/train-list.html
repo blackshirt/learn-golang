@@ -14,23 +14,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="train-rekapitulasi">
+<dom-module id="train-list">
   <template>
+		<style include="iron-flex iron-flex-alignment"></style>
     <style include="shared-styles">
       :host {
         display: block;
 
         padding: 10px;
+				--paper-datatable-api-header: {
+          color: var(--paper-light-blue-900);
+        }
+        --paper-datatable-api-checked-checkbox-color: var(--paper-green-500);
+        --paper-datatable-api-tr-selected-background: #D9FFA9;
+        --paper-datatable-api-tr-hover-background-color: var(--paper-yellow-100);
+        --paper-datatable-api-tr-even-background-color: var(--paper-blue-grey-50);
+        --paper-datatable-api-tr-odd-background-color: var(--paper-light-blue-50);
       }
     </style>
 	<iron-ajax 
 		id="reqTr"
 		auto
 		url="http://127.0.0.1:5000/trains"
-		params='{"start": 0, "limit": 100}'
+		params='{"start": 0, "limit": 500}'
 		handle-as="json"
 		on-response="handleResponse"
 		>
@@ -44,23 +55,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       	</div>
 	</template>
 	-->
-	<!-- menggungakan iron-list -->
-	<iron-list items="[[trainings]]" as="item">
+	<!-- menggungakan iron-list 
+		<iron-list items="[[trainings]]" as="item">
     		<template is="dom-bind">
-      		<div class="card" tabindex$="[[tabIndex]]">
+      		<div class="card">
       			<div class="circle">{{item.id}}</div>
       			<h1>{{item.thn_diklat}}</h1>
       			<p>{{item.nama_diklat}}</p>
       		</div>
     		</template>
    	</iron-list>
-	
-
+	-->
+	<!-- menggunakan component paper-datatable-api -->
+	<paper-datatable-api paginate data="[[trainings]]">
+  	<paper-datatable-api-column header="No" draggable-column property="id">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+  	<paper-datatable-api-column header="Titel" property="nama_diklat">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+		<paper-datatable-api-column header="Tahun" property="thn_diklat">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+	</paper-datatable-api>
   </template>
 
   <script>
-    class TrainRekapitulasi extends Polymer.Element {
-      static get is() { return 'train-rekapitulasi'; }
+    class TrainList extends Polymer.Element {
+      static get is() { return 'train-list'; }
 	  static get properties() {
 		return {
 			trainings: {
@@ -77,6 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  }
     }
 
-    window.customElements.define(TrainRekapitulasi.is, TrainRekapitulasi);
+    window.customElements.define(TrainList.is, TrainList);
   </script>
 </dom-module>

@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!-- <link rel="import" href="../bower_components/polymer/polymer.html">  -->
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -22,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="train-rekapitulasi.html">
+<link rel="lazy-import" href="train-list.html">
 <link rel="lazy-import" href="train-pkp.html">
 <link rel="lazy-import" href="train-program.html">
 <link rel="lazy-import" href="my-view404.html">
@@ -42,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-header {
-        color: #f20436;
+        color: #f20416;
         background-color: var(--app-primary-color);
       }
 
@@ -82,15 +83,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout fullbleed force-narrow>
+    <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
 		  <!-- update menggunakan # agar route tetap berfungsi setelah refresh -->
-          <a name="rekapitulasi" href="#[[rootPath]]rekapitulasi">Rekap</a>
+          <a name="list" href="#[[rootPath]]list">Rekap</a>
           <a name="pkp" href="#[[rootPath]]pkp">PKP</a>
-          <a name="program" href="#[[rootPath]]program">View Three</a>
+          <a name="program" href="#[[rootPath]]program">Program</a>
+		  <a name="add" href="#[[rootPath]]add">List</a>
         </iron-selector>
       </app-drawer>
 
@@ -109,9 +111,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <train-rekapitulasi name="rekapitulasi"></train-rekapitulasi>
+          <train-list name="list"></train-list>
           <train-pkp name="pkp"></train-pkp>
           <train-program name="program"></train-program>
+		  <train-add name="add"></train-add>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -145,8 +148,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
-        // Default to 'rekapitulasi' in that case.
-        this.page = page || 'rekapitulasi';
+        // Default to 'list' in that case.
+        this.page = page || 'add';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
