@@ -16,6 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+
 
 <link rel="import" href="shared-styles.html">
 
@@ -30,22 +35,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				--paper-datatable-api-header: {
           color: var(--paper-light-blue-900);
         }
+				}
         --paper-datatable-api-checked-checkbox-color: var(--paper-green-500);
         --paper-datatable-api-tr-selected-background: #D9FFA9;
         --paper-datatable-api-tr-hover-background-color: var(--paper-yellow-100);
         --paper-datatable-api-tr-even-background-color: var(--paper-blue-grey-50);
         --paper-datatable-api-tr-odd-background-color: var(--paper-light-blue-50);
-      }
+      
+			paper-dialog.add-train {
+    		position: fixed;
+    		top: auto;
+    		right: auto;
+    		width: auto;
+    		height: auto;
+    		overflow: auto;
+  		}
+			
     </style>
+	
 	<iron-ajax 
 		id="reqTr"
 		auto
 		url="http://127.0.0.1:5000/trains"
-		params='{"start": 0, "limit": 500}'
+		params='{"start": 0, "limit": 20}'
 		handle-as="json"
 		on-response="handleResponse"
 		>
 	</iron-ajax>
+	<paper-dialog id="addTrainDialog" class="add-train">
+  	<h2>Dialog Title</h2>
+  	<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
+		<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
+		<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
+		<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
+		<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
+		<paper-input name="address" label="Alamat" type="text" required auto-validate></paper-input>
+		<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
+		<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
+		
+		<label>Category:</label>
+		<paper-radio-group allow-empty-selection required auto-validate>
+  		<paper-radio-button name="small">Small</paper-radio-button>
+  		<paper-radio-button name="medium">Medium</paper-radio-button>
+  		<paper-radio-button name="large">Large</paper-radio-button>
+		</paper-radio-group>
+		<div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+    	<paper-button on-click='addTask' autofocus>Accept</paper-button>
+  	</div>
+	</paper-dialog>
+	<!-- Create a floating action button -->
+  <paper-fab icon='add' style='position:absolute; bottom: 30px; right:24px'
+                       on-click='showAddTrainDialog'>
+  </paper-fab>
+	
+
 	<!-- menggunakan template dom-repeat 
 	<template is="dom-repeat" items="[[trainings]]">
     		<div class="card">
@@ -66,7 +110,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     		</template>
    	</iron-list>
 	-->
-	<!-- menggunakan component paper-datatable-api -->
+	<!-- menggunakan component paper-datatable-api 
+		https://www.webcomponents.org/element/RoXuS/paper-datatable-api
+	-->
 	<paper-datatable-api paginate data="[[trainings]]">
   	<paper-datatable-api-column header="No" draggable-column property="id">
     <template>
@@ -84,7 +130,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   	</paper-datatable-api-column>
 	</paper-datatable-api>
-  </template>
+	
+	
+  
+	</template>
 
   <script>
     class TrainList extends Polymer.Element {
@@ -101,8 +150,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  //	this.$.reqTr.generateRequest();
 	  //}
 	  handleResponse(data) {
-		this.trainings = data.detail.response;
-	  }
+				this.trainings = data.detail.response;
+	  	}
+		
+		showAddTrainDialog() {
+    	this.$.addTrainDialog.open();
+			}
     }
 
     window.customElements.define(TrainList.is, TrainList);
