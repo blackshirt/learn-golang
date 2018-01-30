@@ -24,44 +24,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
-        padding: 10px;
+        padding: 5px;
       }
     </style>
 	<iron-form>
-      	  <form method="post" action="/trains">
-    <div class="card">
+    	<form method="post" action="/trains">    	
         <h1>Add diklat</h1>
-	</div>
-	<div class="card">
-		<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
-		<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
-		<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
-		<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
-		<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
-		<paper-input name="address" label="Alamat" type="text" required></paper-input>
-		<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
-		<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
-		<label>Category:</label>
 		
-		<paper-radio-group allow-empty-selection required auto-validate>
-  		<paper-radio-button name="small">Small</paper-radio-button>
-  		<paper-radio-button name="medium">Medium</paper-radio-button>
-  		<paper-radio-button name="large">Large</paper-radio-button>
-		</paper-radio-group>
+		<div class="card">
+			<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
+			<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
+			<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
+			<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
+			<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
+			<paper-input name="address" label="Alamat" type="text" required></paper-input>
+			<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
+			<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
+			<label>Category:</label>		
+			<paper-dropdown>
+				<paper-dropdown-menu></paper-dropdown-menu>
+			</paper-dropdown>
 		
-	</div>
-	<div class="card">
-		<paper-button raised>Post</paper-button>
-	</div>
-	</form>
-		  	
-	</iron-form>
+		</div>
+		<div class="card">
+			<paper-button raised>Post</paper-button>
+		</div>
+		</form>	
+	</iron-form>	  	
   </template>
 
   <script>
     class TrainAdd extends Polymer.Element {
       static get is() { return 'train-add'; }
+      static get properties() {
+      	return {
+      		categories: {
+      			type: Array,
+      			value: [
+      				{1: 'Diklat Teknis'},
+      			]
+      		},
+      	};
+      }
     }
 
     window.customElements.define(TrainAdd.is, TrainAdd);

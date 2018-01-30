@@ -24,8 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 
 <link rel="lazy-import" href="train-list.html">
-<link rel="lazy-import" href="train-pkp.html">
-<link rel="lazy-import" href="train-program.html">
+<link rel="lazy-import" href="train-add.html">
 <link rel="lazy-import" href="my-view404.html">
 
 <dom-module id="train-app">
@@ -90,8 +89,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
 		  <!-- update menggunakan # agar route tetap berfungsi setelah refresh -->
           <a name="list" href="#[[rootPath]]list">Rekap</a>
-          <a name="pkp" href="#[[rootPath]]pkp">PKP</a>
-          <a name="program" href="#[[rootPath]]program">Program</a>
 		  <a name="add" href="#[[rootPath]]add">List</a>
         </iron-selector>
       </app-drawer>
@@ -111,9 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <train-list name="list"></train-list>
-          <train-pkp name="pkp"></train-pkp>
-          <train-program name="program"></train-program>
+          <train-list name="list"></train-list>          
 		  <train-add name="add"></train-add>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -149,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'list' in that case.
-        this.page = page || 'add';
+        this.page = page || 'list';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {

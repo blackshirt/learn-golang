@@ -26,23 +26,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="train-list">
   <template>
-		<style include="iron-flex iron-flex-alignment"></style>
+	<style include="iron-flex iron-flex-alignment"></style>
     <style include="shared-styles">
       :host {
         display: block;
 
         padding: 10px;
-				--paper-datatable-api-header: {
-          color: var(--paper-light-blue-900);
-        }
-				}
+		  --paper-datatable-api-header: {
+              color: var(--paper-light-blue-900);
+          }
+		}
         --paper-datatable-api-checked-checkbox-color: var(--paper-green-500);
         --paper-datatable-api-tr-selected-background: #D9FFA9;
         --paper-datatable-api-tr-hover-background-color: var(--paper-yellow-100);
         --paper-datatable-api-tr-even-background-color: var(--paper-blue-grey-50);
         --paper-datatable-api-tr-odd-background-color: var(--paper-light-blue-50);
       
-			paper-dialog.add-train {
+		paper-dialog.add-train {
     		position: fixed;
     		top: auto;
     		right: auto;
@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	</iron-ajax>
 	<paper-dialog id="addTrainDialog" class="add-train">
   	<h2>Dialog Title</h2>
-  	<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
+  		<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
 		<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
 		<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
 		<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
@@ -75,14 +75,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		
 		<label>Category:</label>
 		<paper-radio-group allow-empty-selection required auto-validate>
-  		<paper-radio-button name="small">Small</paper-radio-button>
-  		<paper-radio-button name="medium">Medium</paper-radio-button>
-  		<paper-radio-button name="large">Large</paper-radio-button>
+  			<paper-radio-button name="small">Small</paper-radio-button>
+  			<paper-radio-button name="medium">Medium</paper-radio-button>
+  			<paper-radio-button name="large">Large</paper-radio-button>
 		</paper-radio-group>
 		<div class="buttons">
-      <paper-button dialog-dismiss>Cancel</paper-button>
-    	<paper-button on-click='addTask' autofocus>Accept</paper-button>
-  	</div>
+      		<paper-button dialog-dismiss>Cancel</paper-button>
+    		<paper-button on-click='addTask' autofocus>Accept</paper-button>
+  		</div>
 	</paper-dialog>
 	<!-- Create a floating action button -->
   <paper-fab icon='add' style='position:absolute; bottom: 30px; right:24px'
