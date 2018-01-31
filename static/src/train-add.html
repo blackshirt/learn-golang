@@ -11,11 +11,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="shared-styles.html">
 
@@ -27,28 +29,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 5px;
       }
     </style>
-	<iron-form>
-    	<form method="post" action="/trains">    	
-        <h1>Add diklat</h1>
-		
-		<div class="card">
-			<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
-			<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
-			<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
-			<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
-			<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
-			<paper-input name="address" label="Alamat" type="text" required></paper-input>
-			<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
-			<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
-			<label>Category:</label>		
-			<paper-dropdown>
-				<paper-dropdown-menu></paper-dropdown-menu>
-			</paper-dropdown>
-		
-		</div>
-		<div class="card">
-			<paper-button raised>Post</paper-button>
-		</div>
+	<iron-form id="addform">
+    <form method="post" action="/trains">    	
+    	<h1>Add diklat</h1>
+			<div class="card">
+				<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
+				<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
+				<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
+				<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
+				<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
+				<paper-input name="address" label="Alamat" type="text" required></paper-input>
+				<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
+				<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
+				<paper-dropdown-menu label="Kategory" selected-item="{{selectedItem}}" selected-item-label="{{selected}}">
+  				<paper-listbox class="dropdown-content" slot="dropdown-content" attr-for-selected="value">
+						<template is="dom-repeat" items="[[categories]]">
+    					<paper-item value="[[item.id]]">[[item.category_name]]</paper-item>
+    				</template>
+  				</paper-listbox>
+				</paper-dropdown-menu>
+				<input is="iron-input" name="category" type="hidden" value$="[[selectedItem.value]]">
+				<div class="output"></div>
+			</div>
+			<paper-button raised on-click="addTrain">Post</paper-button>
 		</form>	
 	</iron-form>	  	
   </template>
@@ -61,11 +64,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       		categories: {
       			type: Array,
       			value: [
-      				{1: 'Diklat Teknis'},
+      				{"id":1, "category_name": "Diklat Teknis"},
+							{"id":2, "category_name": "PKP"},
+							{"id":3, "category_name": "Bimtek"},
+							{"id":4, "category_name": "Workshop"},
+							{"id":5, "category_name": "Training"},
+							{"id":6, "category_name": "Seminar"},
+							{"id":7, "category_name": "Diklat Fungsional"},
+							{"id":8, "category_name": "Diklat Kepemimpinan Tk. I"},
+							{"id":9, "category_name": "Diklat Kepemimpinan Tk. II"},
+							{"id":10, "category_name": "Diklat Kepemimpinan Tk. III"},
+							{"id":11, "category_name": "Diklat Kepemimpinan Tk. IV"},
+							{"id":12, "category_name": "Diklat Kepemimpinan Tk. V"},
+							{"id":13, "category_name": "Prajabatan"},
+							{"id":14, "category_name": "Struktural"},
+							{"id":15, "category_name": "Undefined"}
       			]
       		},
       	};
       }
+			
+			addTrain() {
+				console.log(this.$.addform.serializeForm());
+			}
     }
 
     window.customElements.define(TrainAdd.is, TrainAdd);

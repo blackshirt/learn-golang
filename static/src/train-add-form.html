@@ -1,0 +1,84 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="train-add-form">
+	<template>
+		
+		<style include="shared-styles">
+		
+			:host {
+        display: block;
+
+        padding: 10px;
+			}
+			paper-dialog {
+    		position: fixed;
+    		top: auto;
+    		right: auto;
+    		width: 400px;
+				max-width: 400px;
+    		height: auto;
+    		overflow: auto;
+				margin: 0px;				
+  		}
+			 
+  	
+		</style>
+		<iron-ajax auto url="/categories" last-response="{{categories}}">
+		</iron-ajax>
+		
+		<paper-dialog id="mydialog">
+		<iron-form>
+		<form>
+  	<h2>Dialog Title</h2>
+		<paper-dialog-scrollable>
+		
+  	<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
+		<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
+		<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
+		<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
+		<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
+		<paper-input name="address" label="Alamat" type="text" required auto-validate></paper-input>
+		<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
+		<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
+		
+		<paper-dropdown-menu label="Kategori">
+  		<paper-listbox slot="dropdown-content" class="dropdown-content">
+    		<template is="dom-repeat" items="[[categories]]">
+            <paper-item>[[item.name]]</paper-item>
+          </template>
+  		</paper-listbox>
+		</paper-dropdown-menu>
+		
+		</paper-dialog-scrollable>
+		</form>
+		</iron-form>
+		<div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+    	<paper-button on-click='addTask' autofocus>Send</paper-button>
+  	</div>
+		
+		</paper-dialog>
+		
+	</template>
+
+	<script>
+		class TrainAddForm extends Polymer.Element {
+			static get is () { 
+				return 'train-add-form'; 
+			}
+			toggleDialog() {
+				this.$.mydialog.toggle();
+			}
+		}
+		window.customElements.define(TrainAddForm.is, TrainAddForm);
+	</script>
+</dom-module>
