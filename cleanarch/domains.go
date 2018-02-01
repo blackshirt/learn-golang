@@ -19,4 +19,5 @@ type Train struct {
 type TrainRepo interface {
 	GetById(int) (*Train, error)
 	Fetch(int, int) ([]*Train, error)
+	Posts() ([]*Train, error)
 }

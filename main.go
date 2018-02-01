@@ -66,6 +66,7 @@ func main() {
 
 	// Set route path
 	trRouter.HandleFunc("/", handler.Fetch).Methods("GET")
+	trRouter.HandleFunc("/", handler.Posts).Methods("POST")
 	trRouter.HandleFunc("/{id:[0-9]+}", handler.GetById).Methods("GET")
 
 	// its ready to start http services

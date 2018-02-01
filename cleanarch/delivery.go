@@ -6,6 +6,7 @@ package cleanarch
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -45,4 +46,19 @@ func (h *HTTPTrainHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(res)
+}
+
+func (h *HTTPTrainHandler) Posts(w http.ResponseWriter, r *http.Request) {
+	//res, err := h.ItemUCase.Posts()
+	//body, err := ioutil.ReadAll(r.Body)
+	//if err != nil {
+	//json.NewEncoder(w).Encode(err.Error())
+	//return
+	//}
+	//json.NewEncoder(w).Encode(body)
+	w.Header().Set("Content-Type", "application/json")
+
+	b, _ := ioutil.ReadAll(r.Body)
+
+	w.Write(b)
 }

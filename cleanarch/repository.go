@@ -72,3 +72,12 @@ func (sqh *SQLHandler) Fetch(start, limit int) ([]*Train, error) {
 	}
 	return res, nil
 }
+
+func (sqh *SQLHandler) Posts() ([]*Train, error) {
+	query := ""
+	res, err := sqh.fetch(query)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

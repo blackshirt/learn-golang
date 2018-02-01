@@ -29,7 +29,8 @@
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#^2.0.0",
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.1",
-    "paper-datatable-api": "^2.0.11"
+    "paper-datatable-api": "^2.0.11",
+    "iron-input": "^2.0.1"
   },
   "resolutions": {
     "polymer": "^2.0.0",
