@@ -17,7 +17,7 @@ type trainUCase struct {
 type TrainUCase interface {
 	GetById(int) (*Train, error)
 	Fetch(int, int) ([]*Train, error)
-	Posts() ([]*Train, error)
+	Posts(*Train) error
 }
 
 // Get a single result
@@ -39,12 +39,12 @@ func (tuc *trainUCase) Fetch(start, limit int) ([]*Train, error) {
 	return res, nil
 }
 
-func (tuc *trainUCase) Posts() ([]*Train, error) {
-	res, err := tuc.trainRepo.Posts()
+func (tuc *trainUCase) Posts(tr *Train) error {
+	err := tuc.trainRepo.Posts(tr)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return res, nil
+	return nil
 }
 
 // Constructor

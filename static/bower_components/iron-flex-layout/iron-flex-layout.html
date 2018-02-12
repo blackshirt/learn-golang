@@ -60,6 +60,15 @@ A complete [guide](https://elements.polymer-project.org/guides/flex-layout) to `
 -->
 <custom-style>
   <style is="custom-style">
+    /* IE 10 support for HTML5 hidden attr */
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</custom-style>
+
+<custom-style>
+  <style is="custom-style">
     html {
 
       --layout: {

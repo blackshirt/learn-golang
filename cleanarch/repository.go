@@ -32,7 +32,7 @@ func (sqh *SQLHandler) fetch(query string, args ...interface{}) ([]*Train, error
 	result := make([]*Train, 0)
 	for rows.Next() {
 		t := new(Train)
-		err := rows.Scan(&t.Id, &t.Nama)
+		err := rows.Scan(&t.Id, &t.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -57,7 +57,7 @@ func (sqh *SQLHandler) GetById(id int) (*Train, error) {
 		}
 	*/
 	train := new(Train)
-	err := sqh.Conn.QueryRow(query).Scan(&train.Id, &train.Nama)
+	err := sqh.Conn.QueryRow(query).Scan(&train.Id, &train.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -73,11 +73,22 @@ func (sqh *SQLHandler) Fetch(start, limit int) ([]*Train, error) {
 	return res, nil
 }
 
-func (sqh *SQLHandler) Posts() ([]*Train, error) {
-	query := ""
-	res, err := sqh.fetch(query)
+func (sqh *SQLHandler) Posts(tr *Train) error {
+
+	query := "insert into train_list(name, description, begin, end, location, address, city, jp, category, penyelenggara) values(?,?,?,?,?,?,?,?,?,?)"
+	_, err := sqh.Conn.Exec(query,
+		&tr.Name,
+		&tr.Description,
+		&tr.Begin,
+		&tr.End,
+		&tr.Location,
+		&tr.Address,
+		&tr.City,
+		&tr.Jp,
+		&tr.Category,
+		&tr.Penyelenggara)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return res, nil
+	return nil
 }

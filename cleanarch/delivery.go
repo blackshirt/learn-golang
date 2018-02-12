@@ -6,7 +6,6 @@ package cleanarch
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -56,9 +55,24 @@ func (h *HTTPTrainHandler) Posts(w http.ResponseWriter, r *http.Request) {
 	//return
 	//}
 	//json.NewEncoder(w).Encode(body)
+	if r.Body == nil {
+		http.Error(w, "Please send a request body", 400)
+		return
+	}
+	// alocate new struct
+	train := new(Train)
+
+	err := json.NewDecoder(r.Body).Decode(&train)
+
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	resp := h.ItemUCase.Posts(train)
+
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
-	b, _ := ioutil.ReadAll(r.Body)
-
-	w.Write(b)
+	json.NewEncoder(w).Encode(resp)
 }
