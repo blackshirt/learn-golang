@@ -116,35 +116,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     class TrainAdd extends Polymer.Element {
       static get is() { return 'train-add'; }
+			
 			constructor() {
-          super();
-          this._submitted = false;
-          this._presubmitted = false;
-        }
+        super();
+        this._submitted = false;
+        this._presubmitted = false;
+      }
+			
 			ready() {
-          super.ready();
-
-          this.$.addTrainForm.addEventListener('iron-form-submit', function() {
-            this._submitted = true;
-          }.bind(this));
-
-          this.$.addTrainForm.addEventListener('iron-form-presubmit', function() {
-            this._presubmitted = true;
-						
-          }.bind(this));
-
-          this.$.addTrainForm.addEventListener('iron-form-response', function() {
-            console.log(this._submitted);
-            console.log(this._presubmitted);
-          }.bind(this));
-					
-					this.$.addTrainForm.addEventListener('change', function(event) {
-   					 // Validate the entire form to see if we should enable the `Submit` button.
+        super.ready();
+        this.$.addTrainForm.addEventListener('iron-form-submit', function() {
+          	this._submitted = true;
+        	}.bind(this));
+        this.$.addTrainForm.addEventListener('iron-form-presubmit', function() {
+          	this._presubmitted = true;
+        	}.bind(this));
+        this.$.addTrainForm.addEventListener('iron-form-response', function() {
+          	console.log(this._submitted);
+          	console.log(this._presubmitted);
+        	}.bind(this));
+				this.$.addTrainForm.addEventListener('change', function(event) {
+   				// Validate the entire form to see if we should enable the `Submit` button.
     				this.$.send.disabled = !this.$.addTrainForm.validate();
   				}.bind(this));
         }
 				
-			
       static get properties() {
       	return {
       		categories: {
@@ -195,21 +191,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       	};
       }
 			
-			_setReqBody() {
+			_setRequestBody() {
 				this.$.addTrainAjax.body = this.formData;
 			}
 			
 			postProcessing() {
         this.$.addTrainAjax.url = 'http://127.0.0.1:5000/trains/';
         // console.log(this.$.addTrainAjax.body)
-				if (this.$.addTrainForm.validate()){
-					this._setReqBody();
+				var addform = this.$.addTrainForm;
+				
+				if (addform.validate()) {
+					this._setRequestBody();
 					this.$.addTrainAjax.generateRequest();
+					this.error = ""
 				}
-				this.error = "Isi input data yang dibutuhkan..."
-				// console.log("set req body");
-				// console.log(this.formData);
-        
+				this.error = "Isi input semua data yang dibutuhkan..."
       }
 			
       handleResponse(event) {
@@ -242,9 +238,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 		}
 		
-		 window.addEventListener('WebComponentsReady', function() {
+		window.addEventListener('WebComponentsReady', function() {
         window.customElements.define(TrainAdd.is, TrainAdd);
       });
-    // window.customElements.define(TrainAdd.is, TrainAdd);
+		// tanpa ini, form input tidak ditampilkan di chrome, tak tahu kenapa ...
+    window.customElements.define(TrainAdd.is, TrainAdd);
   </script>
 </dom-module>
