@@ -75,11 +75,11 @@ CREATE TABLE IF NOT EXISTS `train_history` (
 ) ENGINE=MyISAM;
 	
 CREATE OR REPLACE VIEW lof_diklat_view AS 
-SELECT tl.name as diklat, tp.short_name as penyelenggara, COUNT(th.pns) AS jml, YEAR(tl.begin) as year
-FROM train_history th
-RIGHT JOIN train_list tl
-    ON tl.id = th.diklat
-LEFT JOIN train_penyelenggara tp
-    ON tp.id = tl.penyelenggara
-GROUP BY tl.id
-ORDER BY year ASC;
+	SELECT tl.name as diklat, tp.short_name as penyelenggara, COUNT(th.pns) AS peserta, YEAR(tl.begin) as year
+	FROM train_history th
+	RIGHT JOIN train_list tl
+    	ON tl.id = th.diklat
+	LEFT JOIN train_penyelenggara tp
+    	ON tp.id = tl.penyelenggara
+	GROUP BY tl.id
+	ORDER BY year ASC;

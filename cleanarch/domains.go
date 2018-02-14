@@ -11,6 +11,21 @@ of your application.
 
 package cleanarch
 
+type Category struct {
+	Id           int    `json:"id"`
+	Code         string `json:"code"`
+	CategoryName string `json:"category_name"`
+	Description  string `json:"description"`
+}
+
+type Penyelenggara struct {
+	Id        int    `json:"id"`
+	ShortName string `json:"short_name"`
+	LongName  string `json:"long_name"`
+	Alamat    string `json:"alamat"`
+	Kota      string `json:"kota"`
+}
+
 type Train struct {
 	Id            int    `json:"id"`
 	Name          string `json:"name"`
@@ -25,8 +40,16 @@ type Train struct {
 	Penyelenggara int    `json:"penyelenggara"`
 }
 
+type TrainRekap struct {
+	Diklat        string `json:"diklat"`
+	Penyelenggara string `json:"penyelenggara"`
+	Peserta       int    `json:"peserta"`
+	Tahun         string `json:"year"`
+}
+
 type TrainRepo interface {
 	GetById(int) (*Train, error)
 	Fetch(int, int) ([]*Train, error)
 	Posts(*Train) error
+	RekapTrain() ([]*TrainRekap, error)
 }

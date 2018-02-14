@@ -17,6 +17,17 @@ type SQLHandler struct {
 	Conn *sql.DB
 }
 
+func NewDB(driver, dataSourceName string) (*sql.DB, error) {
+	db, err := sql.Open(driver, dataSourceName)
+	if err != nil {
+		return nil, err
+	}
+	if err = db.Ping(); err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
 // Sql handle Constructor
 func NewSQLHandler(conn *sql.DB) *SQLHandler {
 	return &SQLHandler{Conn: conn}
@@ -91,4 +102,23 @@ func (sqh *SQLHandler) Posts(tr *Train) error {
 		return err
 	}
 	return nil
+}
+
+func (sqh *SQLHandler) RekapTrain() ([]*TrainRekap, error) {
+	query := "select * from lof_diklat_view"
+	rows, err := sqh.Conn.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	result := make([]*TrainRekap, 0)
+	for rows.Next() {
+		t := new(TrainRekap)
+		err := rows.Scan(&t.Diklat, &t.Penyelenggara, &t.Peserta, &t.Tahun)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, t)
+	}
+	return result, nil
 }

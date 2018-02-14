@@ -76,3 +76,13 @@ func (h *HTTPTrainHandler) Posts(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(resp)
 }
+
+func (h *HTTPTrainHandler) RekapTrain(w http.ResponseWriter, r *http.Request) {
+	result, err := h.ItemUCase.RekapTrain()
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
+}

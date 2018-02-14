@@ -65,6 +65,7 @@ func main() {
 	handler := cleanarch.NewHTTPTrainHandler(truc)
 
 	// Set route path
+	router.HandleFunc("/rekap", handler.RekapTrain).Methods("GET")
 	trRouter.HandleFunc("/", handler.Fetch).Methods("GET")
 	trRouter.HandleFunc("/", handler.Posts).Methods("POST")
 	trRouter.HandleFunc("/{id:[0-9]+}", handler.GetById).Methods("GET")

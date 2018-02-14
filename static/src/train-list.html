@@ -8,18 +8,18 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
-<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 
 <link rel="import" href="shared-styles.html">
@@ -30,67 +30,83 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
-		  --paper-datatable-api-header: {
-              color: var(--paper-light-blue-900);
-          }
-		}
+		  	--paper-datatable-api-header: {
+            color: var(--paper-light-blue-900);
+					}
+        }
+			
         --paper-datatable-api-checked-checkbox-color: var(--paper-green-500);
         --paper-datatable-api-tr-selected-background: #D9FFA9;
         --paper-datatable-api-tr-hover-background-color: var(--paper-yellow-100);
         --paper-datatable-api-tr-even-background-color: var(--paper-blue-grey-50);
         --paper-datatable-api-tr-odd-background-color: var(--paper-light-blue-50);
-      
-		paper-dialog.add-train {
-    		position: fixed;
-    		top: auto;
-    		right: auto;
-    		width: auto;
-    		height: auto;
-    		overflow: auto;
-  		}
-			
     </style>
-	
-	<iron-ajax 
+
+	<iron-ajax
 		id="reqTr"
 		auto
-		url="http://127.0.0.1:5000/trains"
+		url="http://127.0.0.1:5000/rekap"
 		params='{"start": 0, "limit": 20}'
 		handle-as="json"
 		on-response="handleResponse"
 		>
 	</iron-ajax>
-	<paper-dialog id="addTrainDialog" class="add-train">
-  	<h2>Dialog Title</h2>
-  	<paper-input name="name" placeholder="Nama diklat" type="text" required auto-validate error-message="Input title diklat!!"></paper-input>
-		<paper-input name="description" label="Keterangan/deskripsi" type="text" required auto-validate error-message="Input deskripsi diklat!!"></paper-input>
-		<paper-input name="begin" label="Mulai" type="date" required auto-validate error-message="Input tgl mulai diklat!!"></paper-input>
-		<paper-input name="end" label="Selesai" type="date" required auto-validate error-message="Input tgl selesai diklat!!"></paper-input>
-		<paper-input name="location" label="Lokasi diklat" type="text" required auto-validate></paper-input>
-		<paper-input name="address" label="Alamat" type="text" required auto-validate></paper-input>
-		<paper-input name="city" label="Kota" type="text" required auto-validate></paper-input>
-		<paper-input name="jp" label="Jumlah JP" type="number" required auto-validate></paper-input>
-		
-		<label>Category:</label>
-		<paper-radio-group allow-empty-selection required auto-validate>
-  			<paper-radio-button name="small">Small</paper-radio-button>
-  			<paper-radio-button name="medium">Medium</paper-radio-button>
-  			<paper-radio-button name="large">Large</paper-radio-button>
-		</paper-radio-group>
-		<div class="buttons">
-      		<paper-button dialog-dismiss>Cancel</paper-button>
-    		<paper-button on-click='addTask' autofocus>Accept</paper-button>
-  		</div>
-	</paper-dialog>
+
+	<paper-dialog id="addTrainDialog">
+		<h1>Add diklat</h1>
+		<div class="card">
+		<iron-form id="addTrainForm">
+				<form>
+					<template is="dom-if" if="[[error]]">
+        		<p class="alert-error"><strong>Error:</strong> [[error]]</p>
+      		</template>
+					<paper-dialog-scrollable>
+					<paper-input name="name" type="text" value="{{formData.name}}" placeholder="Nama Diklat" auto-validate required error-message="Input title diklat!!"></paper-input>
+      		<paper-input name="description" type="text" value="{{formData.description}}" placeholder="Deskripsi" auto-validate required error-message="Input deskripsi diklat!!"></paper-input>
+
+					<paper-dropdown-menu label="Kategory" selected-item="{{selectedItem}}" selected-item-label="{{selected}}" auto-validate required error-message="Pilih satu!!">
+						<paper-listbox	 class="dropdown-content" slot="dropdown-content" attr-for-selected="value" selected="{{formData.category}}">
+							<template is="dom-repeat" items="[[categories]]">
+								<paper-item value="[[item.id]]">[[item.id]] - [[item.category_name]]</paper-item>
+							</template>
+  					</paper-listbox>
+					</paper-dropdown-menu>
+					<input is="iron-input" name="category" type="hidden" value$="[[formData.category]]">
+
+      		<paper-input name="begin" type="date" value="{{formData.begin}}" placeholder="Mulai" auto-validate required error-message="Input mulai diklat!!"></paper-input>
+      		<paper-input name="end" type="date" value="{{formData.end}}" placeholder="Kelar" auto-validate required error-message="Input selesai diklat!!"></paper-input>
+
+					<paper-dropdown-menu label="Penyelenggara" selected-item="{{selectedItem}}" selected-item-label="{{selected}}" required auto-validate error-message="Pilih satu!!">
+						<paper-listbox	 class="dropdown-content" slot="dropdown-content" attr-for-selected="value" selected="{{formData.penyelenggara}}">
+							<template is="dom-repeat" items="[[penyelenggara]]">
+								<paper-item value="[[item.id]]">[[item.id]] - [[item.short_name]]</paper-item>
+							</template>
+  					</paper-listbox>
+					</paper-dropdown-menu>
+					<input is="iron-input" name="penyelenggara" type="hidden" value$="[[formData.penyelenggara]]">
+
+					<paper-input name="location" type="text" value="{{formData.location}}" placeholder="Location" auto-validate required error-message="Input selesai diklat!!"></paper-input>
+      		<paper-input name="address" type="text" value="{{formData.address}}" placeholder="Address" auto-validate required error-message="Input alamat diklat!!"></paper-input>
+      		<paper-input name="city" type="text" value="{{formData.city}}" placeholder="City" auto-validate required error-message="Input city diklat!!"></paper-input>
+      		<paper-input name="jp" type="number" value="{{formData.jp}}" placeholder="JP" auto-validate required error-message="Input jampel diklat!!"></paper-input>
+
+					<div class="buttons">
+        		<paper-button id="send" raised class="primary" on-tap="postProcessing">Send to server ..</paper-button>
+      		</div>
+					</paper-dialog-scrollable>
+				</form>
+			</iron-form>
+			
+			</div>
+		</paper-dialog>
 	<!-- Create a floating action button -->
   <paper-fab icon='add' style='position:absolute; bottom: 30px; right:24px'
                        on-click='showAddTrainDialog'>
   </paper-fab>
-	
 
-	<!-- menggunakan template dom-repeat 
+
+	<!-- menggunakan template dom-repeat
 	<template is="dom-repeat" items="[[trainings]]">
     		<div class="card">
       		<div class="circle">{{item.id}}</div>
@@ -99,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       	</div>
 	</template>
 	-->
-	<!-- menggungakan iron-list 
+	<!-- menggungakan iron-list
 		<iron-list items="[[trainings]]" as="item">
     		<template is="dom-bind">
       		<div class="card">
@@ -110,9 +126,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     		</template>
    	</iron-list>
 	-->
-	<!-- menggunakan component paper-datatable-api 
+	<!-- menggunakan component paper-datatable-api
 		https://www.webcomponents.org/element/RoXuS/paper-datatable-api
 	-->
+	<!--
 	<paper-datatable-api paginate data="[[trainings]]">
   	<paper-datatable-api-column header="No" draggable-column property="id">
     <template>
@@ -130,33 +147,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   	</paper-datatable-api-column>
 	</paper-datatable-api>
-	
-	
-  
+	-->
+	<paper-datatable-api paginate data="[[trainings]]">
+  	<paper-datatable-api-column header="Diklat" draggable-column property="diklat">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+  	<paper-datatable-api-column header="Penyelenggara" property="penyelenggara">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+		<paper-datatable-api-column header="Peserta" property="peserta">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+		<paper-datatable-api-column header="Tahun" property="year">
+    <template>
+      <span>{{value}}</span>
+    </template>
+  	</paper-datatable-api-column>
+	</paper-datatable-api>
+
 	</template>
 
   <script>
     class TrainList extends Polymer.Element {
       static get is() { return 'train-list'; }
-	  static get properties() {
-		return {
-			trainings: {
-				type: Array
-			}
-		}
-	  }
-	  //ready() {
-	  //	super.ready();
-	  //	this.$.reqTr.generateRequest();
-	  //}
-	  handleResponse(data) {
+	  	static get properties() {
+			return {
+				trainings: {
+					type: Array
+					}
+				}
+	  	}
+	 	 	//ready() {
+	  	//	super.ready();
+	  	//	this.$.reqTr.generateRequest();
+	  	//}
+	  	handleResponse(data) {
 				this.trainings = data.detail.response;
 	  	}
-		
-		showAddTrainDialog() {
-    	this.$.addTrainDialog.open();
-			}
-    }
+
+			showAddTrainDialog() {
+    		this.$.addTrainDialog.open();
+				}
+    	}
 
     window.customElements.define(TrainList.is, TrainList);
   </script>

@@ -18,6 +18,7 @@ type TrainUCase interface {
 	GetById(int) (*Train, error)
 	Fetch(int, int) ([]*Train, error)
 	Posts(*Train) error
+	RekapTrain() ([]*TrainRekap, error)
 }
 
 // Get a single result
@@ -45,6 +46,14 @@ func (tuc *trainUCase) Posts(tr *Train) error {
 		return err
 	}
 	return nil
+}
+
+func (tuc *trainUCase) RekapTrain() ([]*TrainRekap, error) {
+	result, err := tuc.trainRepo.RekapTrain()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // Constructor
