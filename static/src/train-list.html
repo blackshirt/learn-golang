@@ -41,6 +41,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-datatable-api-tr-hover-background-color: var(--paper-yellow-100);
         --paper-datatable-api-tr-even-background-color: var(--paper-blue-grey-50);
         --paper-datatable-api-tr-odd-background-color: var(--paper-light-blue-50);
+				paper-dialog: {
+					width: 600px;
+					overflow: auto;
+				}
     </style>
 
 	<iron-ajax
@@ -52,16 +56,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		on-response="handleResponse"
 		>
 	</iron-ajax>
-
+	<div class="card"><h1>Add diklat</h1></div>
 	<paper-dialog id="addTrainDialog">
-		<h1>Add diklat</h1>
-		<div class="card">
+	<paper-dialog-scrollable>
+		
+		
+		
 		<iron-form id="addTrainForm">
 				<form>
 					<template is="dom-if" if="[[error]]">
         		<p class="alert-error"><strong>Error:</strong> [[error]]</p>
       		</template>
-					<paper-dialog-scrollable>
+					
 					<paper-input name="name" type="text" value="{{formData.name}}" placeholder="Nama Diklat" auto-validate required error-message="Input title diklat!!"></paper-input>
       		<paper-input name="description" type="text" value="{{formData.description}}" placeholder="Deskripsi" auto-validate required error-message="Input deskripsi diklat!!"></paper-input>
 
@@ -94,12 +100,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<div class="buttons">
         		<paper-button id="send" raised class="primary" on-tap="postProcessing">Send to server ..</paper-button>
       		</div>
-					</paper-dialog-scrollable>
+					
 				</form>
 			</iron-form>
 			
-			</div>
+			</paper-dialog-scrollable>
 		</paper-dialog>
+			</div>
 	<!-- Create a floating action button -->
   <paper-fab icon='add' style='position:absolute; bottom: 30px; right:24px'
                        on-click='showAddTrainDialog'>
