@@ -1,0 +1,204 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="add-form">
+	<template>
+		<style include="shared-styles">
+			:host {
+        display: block;
+        padding: 10px;
+			}
+		</style>
+		<iron-ajax
+      id="addTrainAjax"
+      method="post"
+      content-type="application/json"
+      handle-as="text"
+      on-response="handleResponse"
+      on-error="handleError">
+    </iron-ajax>
+		
+		<iron-form id="addTrainForm">
+			<form>
+				<template is="dom-if" if="[[error]]">
+        	<p class="alert-error"><strong>Error:</strong> [[error]]</p>
+      	</template>
+					<paper-input name="name" type="text" value="{{formData.name}}" placeholder="Nama Diklat" auto-validate required error-message="Input title diklat!!"></paper-input>
+      		<paper-input name="description" type="text" value="{{formData.description}}" placeholder="Deskripsi" auto-validate required error-message="Input deskripsi diklat!!"></paper-input>
+			
+					<paper-dropdown-menu label="Kategory" selected-item="{{selectedItem}}" selected-item-label="{{selected}}" auto-validate required error-message="Pilih satu!!">
+						<paper-listbox	 class="dropdown-content" slot="dropdown-content" attr-for-selected="value" selected="{{formData.category}}">
+							<template is="dom-repeat" items="[[categories]]">
+								<paper-item value="[[item.id]]">[[item.id]] - [[item.category_name]]</paper-item>
+							</template>
+  					</paper-listbox>
+					</paper-dropdown-menu>
+					<input is="iron-input" name="category" type="hidden" value$="[[formData.category]]">	
+			
+      		<paper-input name="begin" type="date" value="{{formData.begin}}" placeholder="Mulai" auto-validate required error-message="Input mulai diklat!!"></paper-input>
+      		<paper-input name="end" type="date" value="{{formData.end}}" placeholder="Kelar" auto-validate required error-message="Input selesai diklat!!"></paper-input>
+			
+					<paper-dropdown-menu label="Penyelenggara" selected-item="{{selectedItem}}" selected-item-label="{{selected}}" required auto-validate error-message="Pilih satu!!">
+						<paper-listbox	 class="dropdown-content" slot="dropdown-content" attr-for-selected="value" selected="{{formData.penyelenggara}}">
+							<template is="dom-repeat" items="[[penyelenggara]]">
+								<paper-item value="[[item.id]]">[[item.id]] - [[item.short_name]]</paper-item>
+							</template>
+  					</paper-listbox>
+					</paper-dropdown-menu>
+					<input is="iron-input" name="penyelenggara" type="hidden" value$="[[formData.penyelenggara]]">
+      
+					<paper-input name="location" type="text" value="{{formData.location}}" placeholder="Location" auto-validate required error-message="Input selesai diklat!!"></paper-input>
+      		<paper-input name="address" type="text" value="{{formData.address}}" placeholder="Address" auto-validate required error-message="Input alamat diklat!!"></paper-input>
+      		<paper-input name="city" type="text" value="{{formData.city}}" placeholder="City" auto-validate required error-message="Input city diklat!!"></paper-input>
+      		<paper-input name="jp" type="number" value="{{formData.jp}}" placeholder="JP" auto-validate required error-message="Input jampel diklat!!"></paper-input>
+      
+					<div class="wrapper-btns">
+        		<paper-button id="send" raised class="primary" on-tap="postProcessing">Send to server ..</paper-button>
+      		</div>
+				</form>
+			</iron-form>
+		
+	</template>
+
+	<script>
+		class AddForm extends Polymer.Element {
+			static get is () { 
+				return 'add-form'; 
+			}
+			
+			constructor() {
+        super();
+        this._submitted = false;
+        this._presubmitted = false;
+      }
+			
+			ready() {
+        super.ready();
+        this.$.addTrainForm.addEventListener('iron-form-submit', function() {
+          	this._submitted = true;
+        	}.bind(this));
+        this.$.addTrainForm.addEventListener('iron-form-presubmit', function() {
+          	this._presubmitted = true;
+        	}.bind(this));
+        this.$.addTrainForm.addEventListener('iron-form-response', function() {
+          	console.log(this._submitted);
+          	console.log(this._presubmitted);
+        	}.bind(this));
+				this.$.addTrainForm.addEventListener('change', function(event) {
+   				// Validate the entire form to see if we should enable the `Submit` button.
+    				this.$.send.disabled = !this.$.addTrainForm.validate();
+  				}.bind(this));
+        }
+				
+      static get properties() {
+      	return {
+      		categories: {
+      			type: Array,
+      			value: [
+      				{"id":1, "category_name": "Diklat Teknis"},
+							{"id":2, "category_name": "PKP"},
+							{"id":3, "category_name": "Bimtek"},
+							{"id":4, "category_name": "Workshop"},
+							{"id":5, "category_name": "Training"},
+							{"id":6, "category_name": "Seminar"},
+							{"id":7, "category_name": "Diklat Fungsional"},
+							{"id":8, "category_name": "Diklat Kepemimpinan Tk. I"},
+							{"id":9, "category_name": "Diklat Kepemimpinan Tk. II"},
+							{"id":10, "category_name": "Diklat Kepemimpinan Tk. III"},
+							{"id":11, "category_name": "Diklat Kepemimpinan Tk. IV"},
+							{"id":12, "category_name": "Diklat Kepemimpinan Tk. V"},
+							{"id":13, "category_name": "Prajabatan"},
+							{"id":14, "category_name": "Struktural"},
+							{"id":15, "category_name": "Undefined"}
+      			]
+      		},
+				penyelenggara: {
+					type: Array,
+					value: [
+						{"id":1, "short_name": "BPSDMD Provinsi Jateng"},
+	    			{"id":2, "short_name": "BKD Provinsi Jateng"},
+						{"id":3, "short_name": "Disarsip Perpus Provinsi Jateng"},
+						{"id":4, "short_name": "Inspekorat Provinsi Jateng"},
+						{"id":5, "short_name": "BKPPD Kabupaten Kebumen"},
+	    			{"id":6, "short_name": "Bapelkes Gombong"},
+						{"id":7, "short_name": "Pusdiklat Regional Yogyakarta"},
+	   				{"id":8, "short_name": "Balai Diklat VIII Yogyakarta"},
+						{"id":9, "short_name": "Badan Diklat Yogakarta"},
+						{"id":10, "short_name": "Pusdiklatwas BPKP Bogor"},
+						{"id":11, "short_name": "Pusdiklat Reskrim POLRI"},
+						{"id":12, "short_name": "PKP2A I LAN Bandung"},
+						{"id":13, "short_name": "LAN RI"},
+						{"id":14, "short_name": "BPSDM Kemendagri RI"},
+						{"id":15, "short_name": "Undefined"}
+					]
+				},
+				formData: {
+					type: Object,
+					value: {}
+					},
+				error: String
+      	};
+      }
+			
+			_setRequestBody() {
+				this.$.addTrainAjax.body = this.formData;
+			}
+			
+			postProcessing() {
+        this.$.addTrainAjax.url = 'http://127.0.0.1:5000/trains/';
+        // console.log(this.$.addTrainAjax.body)
+				var addform = this.$.addTrainForm;
+				
+				if (addform.validate()) {
+					this._setRequestBody();
+					this.$.addTrainAjax.generateRequest();
+					this.error = ""
+				}
+				this.error = "Isi input semua data yang dibutuhkan..."
+      }
+			
+      handleResponse(event) {
+        var response = JSON.parse(event.detail.response);
+							
+        //if (response.id_token) {
+        //    this.error = '';
+        //    this.storedUser = {
+        //        name: this.formData.username,
+        //        id_token: response.id_token,
+        //        access_token: response.access_token,
+        //        loggedin: true
+        //    };
+        // redirect to Secret Quotes
+        //    this.set('route.path', '/trains');
+        //}
+              
+				console.log("log response")
+				console.log(response);
+				
+				// reset form data
+				this.$.addTrainForm.reset();
+        this.formData = {};
+				this.error = "";		
+      }
+			
+			handleError(event) {
+        this.error = event.detail.request.xhr.response;
+      }
+
+		}
+		
+		//window.addEventListener('WebComponentsReady', function() {
+    //    window.customElements.define(AddForm.is, AddForm);
+    //  });
+		// tanpa ini, form input tidak ditampilkan di chrome, tak tahu kenapa ...
+    window.customElements.define(AddForm.is, AddForm);
+	</script>
+</dom-module>
